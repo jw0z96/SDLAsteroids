@@ -1,26 +1,24 @@
-#ifndef EMMITER_H
-#define EMMITER_H
+#ifndef BULLET_H
+#define BULLET_H
 
 //----------------------------------------------------------------------------------------------------------------------
 /// This is a derived class, the event, update, draw
 /// functions are to be refefined in the derived class.
 //----------------------------------------------------------------------------------------------------------------------
 
-#include <vector>
 #include "gameentity.h"
-#include "asteroid.h"
 
-class Emmiter: public GameEntity
+class Bullet: public GameEntity
 {
     public:
         //----------------------------------------------------------------------------------------------------------------------
         /// @brief ctor
         //----------------------------------------------------------------------------------------------------------------------
-        Emmiter(ngl::Camera* _cam);
+        Bullet(ngl::Camera* _cam, ngl::Vec3 _pos);
         //----------------------------------------------------------------------------------------------------------------------
         /// @brief dtor
         //----------------------------------------------------------------------------------------------------------------------
-        ~Emmiter();
+        ~Bullet();
         //----------------------------------------------------------------------------------------------------------------------
         /// @brief handle events to this game entity object
         //----------------------------------------------------------------------------------------------------------------------
@@ -33,26 +31,9 @@ class Emmiter: public GameEntity
         /// @brief draw this game entity object
         //----------------------------------------------------------------------------------------------------------------------
         void draw();
-
-        inline int getNumOfAsteroids(){return m_asteroids.size();}
-
-        inline ngl::Vec3 getAsteroidPos(int _index){return m_asteroids[_index]->getPos();}
-
-        inline double getAsteroidSize(int _index){return m_asteroids[_index]->getSize();}
-
-        inline void killAsteroid(int _index){m_asteroids.erase(m_asteroids.begin()+_index);}
-
-
     private:
-        //----------------------------------------------------------------------------------------------------------------------
-        /// @brief array of game entity objects to store the emmited asteroids
-        //----------------------------------------------------------------------------------------------------------------------
-        std::vector<std::shared_ptr<Asteroid>> m_asteroids;
-        //----------------------------------------------------------------------------------------------------------------------
-        /// @brief the last time an asteroid was emit
-        //----------------------------------------------------------------------------------------------------------------------
-        double lastSpawned;
+        int m_life;
 
 };
 
-#endif // EMMITER_H
+#endif // BULLET_H

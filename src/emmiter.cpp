@@ -103,7 +103,7 @@ int Emmiter::update(double _timestep)
     if(SDL_GetTicks()-lastSpawned > randomFloat(20,200))
     {
         lastSpawned = SDL_GetTicks();
-        m_asteroids.emplace_back(new Asteroid(m_cam, randomFloat(-10,10), randomFloat(-1,1)));
+        m_asteroids.emplace_back(new Asteroid(m_cam, randomFloat(-20,20), randomFloat(-2,2),randomFloat(0.1,1)));
 
     }
 

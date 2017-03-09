@@ -6,6 +6,7 @@
 /// functions are to be refefined in the derived class.
 //----------------------------------------------------------------------------------------------------------------------
 
+#include <vector>
 #include "gameentity.h"
 
 class Player: public GameEntity
@@ -31,11 +32,28 @@ class Player: public GameEntity
         /// @brief draw this game entity object
         //----------------------------------------------------------------------------------------------------------------------
         void draw();
+        //----------------------------------------------------------------------------------------------------------------------
+        /// @brief fire two bullets
+        //----------------------------------------------------------------------------------------------------------------------
+        void fire();
+
+        inline int getNumOfBullets(){return m_bullets.size();}
+
+        inline ngl::Vec3 getBulletPos(int _index){return m_bullets[_index]->getPos();}
+
+
+        inline void killBullet(int _index){m_bullets.erase(m_bullets.begin()+_index);}
+
 
     private:
 
-        int keyX, keyY;
-        double DOT_VEL;
+        bool firing;
+        int keyX, keyY, firingWait;
+        double DOT_VEL, lastFired;
+        //----------------------------------------------------------------------------------------------------------------------
+        /// @brief array of game entity objects to store the bullets
+        //----------------------------------------------------------------------------------------------------------------------
+        std::vector<std::shared_ptr<GameEntity>> m_bullets;
 };
 
 #endif // PLAYER_H

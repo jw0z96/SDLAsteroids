@@ -7,6 +7,9 @@
 #include <memory>
 #include <ngl/Camera.h>
 #include <ngl/Light.h>
+#include "player.h"
+#include "emmiter.h"
+#include "terrain.h"
 
 class AsteroidScene
 {
@@ -43,7 +46,12 @@ class AsteroidScene
         //----------------------------------------------------------------------------------------------------------------------
         /// @brief array of game entity objects in the scene, accessed through pointers because i'm clearly a bit dumb
         //----------------------------------------------------------------------------------------------------------------------
-        std::vector<std::shared_ptr<GameEntity>> m_gameEntities;
+        //std::vector<std::shared_ptr<GameEntity>> m_gameEntities;
+
+        Player* m_player;
+        Emmiter* m_emmiter;
+        //Terrain* m_terrain;
+
         //----------------------------------------------------------------------------------------------------------------------
         /// @brief a simple light use to illuminate the screen
         //----------------------------------------------------------------------------------------------------------------------

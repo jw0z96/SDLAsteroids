@@ -1,4 +1,4 @@
-#include "asteroid.h"
+#include "bullet.h"
 #include <SDL.h>
 #include <iostream>
 #include <ngl/NGLInit.h>
@@ -8,51 +8,40 @@
 #include <ngl/Camera.h>
 #include <ngl/Light.h>
 
-float randomaFloat(float LO, float HI)
+Bullet::Bullet(ngl::Camera* _cam, ngl::Vec3 _pos)
 {
-    return LO + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(HI-LO)));
-}
-
-Asteroid::Asteroid(ngl::Camera* _cam, double _x, double _y, double _sz)
-{
-    m_name = "asteroid";
+    m_name = "bullet";
     m_cam = _cam;
-    m_modelVel = ngl::Vec3(0.0,0.0,0.01);
-    m_modelPos = ngl::Vec3(_x,_y,-50.0);
-    m_sz = _sz;
-    //birthTime = SDL_GetTicks();
+    m_modelVel = ngl::Vec3(0.0,0.0,-0.01);
+    m_modelPos = _pos;
+    m_life = 0;
     //std::cout<<m_name<<" CTOR CALLED in Asteroid class\n";
 }
 
-Asteroid::~Asteroid()
+Bullet::~Bullet()
 {
-    //std::cout<<m_name<<" DTOR CALLED in Asteroid class\n";
+    std::cout<<m_name<<" DTOR CALLED in bullet class\n";
 }
 
-int Asteroid::event(SDL_Event& _event)
+int Bullet::event(SDL_Event& _event)
 {
     //std::cout<<_event.type<<m_name<<" EVENT HANDLE CALL\n";
 
     return 0;
 }
 
-int Asteroid::update(double _timestep)
+int Bullet::update(double _timestep)
 {
     //std::cout<<_timestep<<m_name<<" UPDATE CALL\n";
-    //std::cout<<keyX<<","<<keyY<<"\n";
 
-    if(m_modelPos.m_z > 3){return 1;}
+    if(m_modelPos.m_z < -50){return 1;}
 
     m_modelPos+=m_modelVel*_timestep;
-
-    m_modelRot+=2*m_modelVel*_timestep*(1/m_sz);
-
-
 
     return 0;
 }
 
-void Asteroid::draw()
+void Bullet::draw()
 {
     //grab an instance of the shader manager
     ngl::ShaderLib *shader=ngl::ShaderLib::instance();
@@ -60,8 +49,8 @@ void Asteroid::draw()
 
     m_transform.reset();
     m_transform.setPosition(m_modelPos);
-    m_transform.setScale(m_sz,m_sz,m_sz);
-    m_transform.setRotation(m_modelRot);
+    m_transform.setScale(0.2,0.2,0.2);
+    //m_transform.setRotation(0,-90,0);
 
     //LOADMATRICESTOSHADER
     //ngl::ShaderLib *shader=ngl::ShaderLib::instance();
@@ -87,3 +76,4 @@ void Asteroid::draw()
     // draw
     prim->draw("football");
 }
+

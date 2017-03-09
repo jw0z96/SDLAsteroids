@@ -11,12 +11,12 @@
 GameEntity::GameEntity()
 {
     m_name = "default";
-    std::cout<<m_name<<" CTOR CALLED in Game Entity class\n";
+    //std::cout<<m_name<<" CTOR CALLED in Game Entity class\n";
 }
 
 GameEntity::~GameEntity()
 {
-    std::cout<<m_name<<" DTOR CALLED in Game Entity class\n";
+    //std::cout<<m_name<<" DTOR CALLED in Game Entity class\n";
 }
 
 int GameEntity::event(SDL_Event& _event)

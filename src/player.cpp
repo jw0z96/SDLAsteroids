@@ -7,6 +7,7 @@
 #include <ngl/Transformation.h>
 #include <ngl/Camera.h>
 #include <ngl/Light.h>
+#include "bullet.h"
 
 Player::Player(ngl::Camera* _cam)
 {
@@ -14,7 +15,10 @@ Player::Player(ngl::Camera* _cam)
     m_cam = _cam;
     keyX = 0;
     keyY = 0;
-    DOT_VEL = 0.0005;
+    DOT_VEL = 0.001;
+    firing = false;
+    lastFired = SDL_GetTicks();
+    firingWait = 100;
 
     //std::cout<<m_name<<" CTOR CALLED\n";
     // now to load the shader and set the values
@@ -81,7 +85,7 @@ int Player::event(SDL_Event& _event)
             case SDLK_DOWN: --keyY; break;// std::cout << "down\n"; break;
             case SDLK_LEFT: --keyX; break;//std::cout << "left\n"; break;
             case SDLK_RIGHT:  ++keyX; break;//std::cout << "right\n"; break;
-            //case SDLK_SPACE: firing = true; break;
+            case SDLK_SPACE: firing = true; break;
             }
         }
     else if( _event.type == SDL_KEYUP && _event.key.repeat == 0){
@@ -90,7 +94,7 @@ int Player::event(SDL_Event& _event)
             case SDLK_DOWN: ++keyY; break;
             case SDLK_LEFT: ++keyX; break;
             case SDLK_RIGHT: --keyX; break;
-            //case SDLK_SPACE: firing = false; break;
+            case SDLK_SPACE: firing = false; break;
             }
         }
 
@@ -103,12 +107,23 @@ int Player::update(double _timestep)
     //std::cout<<keyX<<","<<keyY<<"\n";
 
     if(keyX != 0){m_modelVel.m_x+=keyX*DOT_VEL;}
-    else{m_modelVel.m_x *= 0.9;}
+    else{m_modelVel.m_x *= 0.8;}
     if(keyY != 0){m_modelVel.m_y+=keyY*DOT_VEL;}
-    else{m_modelVel.m_y *= 0.9;}
+    else{m_modelVel.m_y *= 0.8;}
 
     m_modelPos.m_x+=m_modelVel.m_x*_timestep;
     m_modelPos.m_y+=m_modelVel.m_y*_timestep;
+
+    if(firing){fire();}
+
+    for(int i; i<m_bullets.size(); i++)
+    {
+        int j = m_bullets[i]->update(_timestep);
+        if(j)
+        {
+            m_bullets.erase(m_bullets.begin()+i); i--;
+        }
+    }
 
     return 0;
 }
@@ -147,5 +162,20 @@ void Player::draw()
     // get the VBO instance and draw the built in teapot
     ngl::VAOPrimitives *prim=ngl::VAOPrimitives::instance();
     // draw
-    prim->draw("teapot");
+    prim->draw("troll");
+
+    for(auto i_bullet : m_bullets)
+    {
+        i_bullet->draw();
+    }
+}
+
+void Player::fire()
+{
+    if(SDL_GetTicks()-lastFired > firingWait)
+    {
+        std::cout << "fire!!\n";
+        lastFired = SDL_GetTicks();
+        m_bullets.emplace_back(new Bullet(m_cam, m_modelPos));
+    }
 }

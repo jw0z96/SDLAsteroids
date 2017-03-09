@@ -21,7 +21,6 @@ Terrain::Terrain(ngl::Camera* _cam)
 
     cols = 20; //width
     rows = 20; //depth
-
     m_modelPos = ngl::Vec3(-cols/2,-5,-rows);
 
     buildVAO();
@@ -110,7 +109,7 @@ int Terrain::update(double _timestep)
 
     double speed = -0.0005;
     double height = 6;
-    double freq = 0.01;
+    double freq = 0.02;
 
     //reset values
 
@@ -122,7 +121,7 @@ int Terrain::update(double _timestep)
         }
     }
 
-    for(int iter = 0; iter<5; ++iter)
+    for(int iter = 0; iter<3; ++iter)
     {
         double i_speed = speed*pow(2,iter);
         double i_height = height/pow(2,iter);
